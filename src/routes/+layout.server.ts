@@ -6,12 +6,19 @@ export async function load({ url }) {
   userStore.subscribe((user) => {
     currentUser = user;
   });
-  if (
-    !currentUser &&
-    !url.pathname.includes("login") &&
-    !url.pathname.includes("signup")
-  ) {
-    throw redirect(302, "/auth/login");
+  if (!currentUser) {
+    if (!url.pathname.includes("login") && !url.pathname.includes("signup")) {
+      throw redirect(302, "/auth/login");
+    }
+  } else {
+    console.log(url.pathname);
+    if (
+      url.pathname === "/" ||
+      url.pathname.includes("login") ||
+      url.pathname.includes("signup")
+    ) {
+      throw redirect(302, "/app");
+    }
   }
 
   return;
