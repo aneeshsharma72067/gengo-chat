@@ -28,7 +28,7 @@
 
 <title>Login</title>
 
-<div class="flex gap-10 md:w-3/5 h-full mx-auto items-center justify-center py-10">
+<div class="flex gap-10 md:w-3/5 h-full mx-auto md:items-center justify-center py-16">
   <div class="flex md:flex-1 flex-col gap-1 items-center w-4/5 md:w-2/5">
     <div class="flex items-center justify-center my-1">
       <div class="w-14 h-14 bg-red-400 rounded-full"></div>

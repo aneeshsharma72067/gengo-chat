@@ -28,10 +28,10 @@
 
 <title>Login</title>
 
-<div class="flex gap-10 md:w-3/5 h-full mx-auto items-center justify-center py-10">
+<div class="flex gap-10 md:w-3/5 h-full mx-auto md:items-center justify-center py-20">
   <div class="flex md:flex-1 flex-col gap-1 items-center w-4/5 md:w-2/5">
     
-    <h1 class="text-[1.7rem] font-medium text-center">Regiser now to get started</h1>
+    <h1 class="text-[1.7rem] font-bold text-slate-600 text-center">Register now to get started</h1>
     <p class="">Enter your details to sign up</p>
     <SignInWithGoogle authType="signup" />
     <div class="flex w-full items-center justify-center gap-5">
