@@ -1,5 +1,5 @@
 <script>
-  import Google from "./Icons/Google.svelte";
+  import Google from "../Icons/Google.svelte";
 </script>
 
 <button
