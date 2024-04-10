@@ -2,7 +2,7 @@
   export let label: string;
   export let name: string;
   export let type: string;
-  export let icon: string = "mail" || "password";
+  export const icon: string = "mail" || "password";
   export let placeholder: string;
   export let value: string;
 </script>
