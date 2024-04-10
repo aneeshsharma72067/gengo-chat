@@ -10,3 +10,9 @@ export async function POST({ request }) {
     { status: 200 }
   );
 }
+
+export async function GET({ request }) {
+  return json({
+    message: "Login API route",
+  });
+}
