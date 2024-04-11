@@ -3,6 +3,7 @@
   import SignInWithGoogle from "$lib/components/ui/GoogleAuth.svelte";
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
   import Wave from "$lib/components/ui/Wave.svelte";
+  import { _hanldeLogin } from "./+page";
 
   type HTMLFormData = {
     email: string;
@@ -12,23 +13,36 @@
     email: "",
     password: "",
   };
+  let emailError: string = "";
+  let passwordError: string = "";
   const hanldeSubmit = async () => {
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-    console.log(data);
+    if (!formData.email && !formData.password) {
+      emailError = "Email is Required";
+      passwordError = "Password is Required";
+      return;
+    }
+    if (!formData.email) {
+      emailError = "Email is Required";
+      return;
+    }
+    if (!formData.password) {
+      passwordError = "Password is Required";
+      return;
+    }
+    if (formData.password.length <= 6) {
+      passwordError = "Password should contain at least 6 characters";
+      return;
+    }
+    const response = await _hanldeLogin(formData);
+    console.log(response);
   };
 </script>
 
 <title>Login</title>
 
-<div class="flex gap-10 md:w-3/5 h-full mx-auto md:items-center justify-center py-16">
+<div
+  class="flex gap-10 md:w-3/5 h-full mx-auto md:items-center justify-center py-16"
+>
   <div class="flex md:flex-1 flex-col gap-1 items-center w-4/5 md:w-2/5">
     <div class="flex items-center justify-center my-1">
       <div class="w-14 h-14 bg-red-400 rounded-full"></div>
@@ -48,6 +62,7 @@
         label="Email"
         placeholder="Enter your Email..."
         bind:value={formData.email}
+        error={formData.email === "" ? emailError : ""}
       />
       <InputWithLabel
         name="password"
@@ -55,12 +70,15 @@
         label="Password"
         placeholder="Enter your password..."
         bind:value={formData.password}
+        error={formData.password.length <= 6 ? passwordError : ""}
       />
       <Button class="w-full my-2" on:click={hanldeSubmit}>Submit</Button>
       <p>Don't have an account ? <a href="/auth/signup">Sign Up</a></p>
     </div>
   </div>
-  <div class="max-sm:hidden flex-1 h-full rounded-3xl overflow-hidden self-start bg-blue-100">
+  <div
+    class="max-sm:hidden flex-1 h-full rounded-3xl overflow-hidden self-start bg-blue-100"
+  >
     <Wave />
   </div>
 </div>
