@@ -1,9 +1,9 @@
-let temporaryUser: App.User | null = {
+let temporaryUser = {
   email: "johndoe@gmail.com",
-  userId: "4jwoief-213rfa-sfc2143-21asfdas",
+  uid: "4jwoief-213rfa-sfc2143-21asfdas",
   username: "johndoe",
 };
 
-temporaryUser = null;
+// temporaryUser = null;
 
 export { temporaryUser };

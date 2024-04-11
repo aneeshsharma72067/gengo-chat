@@ -4,6 +4,7 @@
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
   import Wave from "$lib/components/ui/Wave.svelte";
   import { _hanldeLogin } from "./+page";
+  import { userStore } from "$lib/stores/user";
 
   type HTMLFormData = {
     email: string;
@@ -15,26 +16,27 @@
   };
   let emailError: string = "";
   let passwordError: string = "";
+  let isLoading: boolean = false;
+
   const hanldeSubmit = async () => {
-    if (!formData.email && !formData.password) {
-      emailError = "Email is Required";
-      passwordError = "Password is Required";
-      return;
-    }
+    isLoading = true;
     if (!formData.email) {
       emailError = "Email is Required";
-      return;
     }
     if (!formData.password) {
       passwordError = "Password is Required";
-      return;
     }
-    if (formData.password.length <= 6) {
+    if (formData.password.length < 6) {
       passwordError = "Password should contain at least 6 characters";
+    }
+    if (!formData.email || formData.password.length < 6) {
+      isLoading = false;
       return;
     }
-    const response = await _hanldeLogin(formData);
-    console.log(response);
+    const res = await _hanldeLogin(formData);
+    userStore.set(res.response.userData);
+    isLoading = false;
+    console.log(res);
   };
 </script>
 
@@ -72,7 +74,9 @@
         bind:value={formData.password}
         error={formData.password.length <= 6 ? passwordError : ""}
       />
-      <Button class="w-full my-2" on:click={hanldeSubmit}>Submit</Button>
+      <Button class="w-full my-2" on:click={hanldeSubmit} {isLoading}
+        >Submit</Button
+      >
       <p>Don't have an account ? <a href="/auth/signup">Sign Up</a></p>
     </div>
   </div>
