@@ -3,9 +3,8 @@
   import SignInWithGoogle from "$lib/components/ui/GoogleAuth.svelte";
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
   import Wave from "$lib/components/ui/Wave.svelte";
-  import { _hanldeSignup } from "./+page";
-  import { userStore } from "../../../lib/stores/store";
-
+  import { authHandlers, userStore } from "../../../lib/stores/store";
+  import { showToast } from "$lib/components/func/toasts";
   type UserSignupData = {
     email: string;
     password: string;
@@ -44,24 +43,19 @@
       isLoading = false;
       return;
     }
-    const res = await _hanldeSignup(formData);
-    if (!res.response.success) {
+    const res = await authHandlers.signup(formData);
+    if (!res.success) {
       isLoading = false;
-      // throw new Error(response.error);
-      console.log(res.response.error);
-      return;
+      showToast("Something Went Wrong !!", "error");
+      throw new Error(res.error ?? undefined);
     }
-    console.log(res.response.userData);
+    showToast("Signup successfull", "success");
     formData = {
       email: "",
       password: "",
       username: "",
     };
     isLoading = false;
-    userStore.set(res.response.userData);
-    userStore.subscribe((val) => {
-      console.log(val);
-    });
   };
 </script>
 

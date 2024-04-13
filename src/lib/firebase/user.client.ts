@@ -1,12 +1,10 @@
 import {
   createUserWithEmailAndPassword,
-  getAuth,
-  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
   type UserCredential,
 } from "firebase/auth";
-import { app, firebaseAuth, firestore } from "./config";
+import { firebaseAuth, firestore } from "./config.client";
 import type { FirebaseError } from "firebase/app";
 import {
   addDoc,
@@ -17,18 +15,7 @@ import {
   where,
 } from "firebase/firestore";
 
-type SignupUserData = {
-  username: string;
-  email: string;
-  password: string;
-};
-
-type LoginUserData = {
-  email: string;
-  password: string;
-};
-
-export const loginUser = async (userData: LoginUserData) => {
+export const loginUser = async (userData: App.LoginUserData) => {
   const { email, password } = userData;
   try {
     const getUser = await signInWithEmailAndPassword(
@@ -58,7 +45,7 @@ export const loginUser = async (userData: LoginUserData) => {
   }
 };
 
-export const signupUser = async (userData: SignupUserData) => {
+export const signupUser = async (userData: App.SignupUserData) => {
   const { username, email, password } = userData;
   try {
     const newUser: UserCredential = await createUserWithEmailAndPassword(
@@ -85,7 +72,7 @@ export const signupUser = async (userData: SignupUserData) => {
     };
   } catch (error) {
     const errorMessage = (error as FirebaseError)?.message;
-    console.log((error as FirebaseError)?.message);
+    console.log((error as FirebaseError)?.message+'|');
     return {
       success: false,
       error: errorMessage,
@@ -102,29 +89,6 @@ export const getUserData = async (uid: string) => {
   }
   const user = userSnapShot.docs[0].data();
   return user;
-};
-
-export const checkAuth = async () => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
-      if (user) {
-        try {
-          const currentUser = await getUserData(user.uid);
-          console.log(
-            " > firebase/user.ts | User resolved, user data :",
-            currentUser
-          );
-          resolve(currentUser);
-        } catch (error) {
-          reject(error);
-        }
-      } else {
-        console.log(" > firebase/user.ts | No user found:");
-        resolve(null);
-      }
-      unsubscribe();
-    });
-  });
 };
 
 export const logout = async () => {

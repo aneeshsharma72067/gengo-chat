@@ -3,16 +3,13 @@
   import SignInWithGoogle from "$lib/components/ui/GoogleAuth.svelte";
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
   import Wave from "$lib/components/ui/Wave.svelte";
-  import { _hanldeLogin } from "./+page";
-  import { userStore, setUser, tempUser } from "../../../lib/stores/store";
+  import { authHandlers, userStore } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { showToast } from "$lib/components/func/toasts";
 
-  userStore.subscribe((data) => {
-    if (data) {
-      goto("/app");
-    }
-  });
+  if ($userStore.currentUser! && $userStore.isUserLoading) {
+    goto("/app");
+  }
   type UserLoginData = {
     email: string;
     password: string;
@@ -40,13 +37,20 @@
       isLoading = false;
       return;
     }
-    const res = await _hanldeLogin(formData);
-    console.log("res for +page.svelte in login : ", res);
+    const res = await authHandlers.login(formData);
     if (res.success) {
-      userStore.set(res.userData);
+      userStore.set({
+        isUserLoading: false,
+        currentUser: res.userData as App.User,
+      });
       showToast("Logged In Successfully", "success");
       isLoading = false;
       goto("/app");
+      return;
+    }
+    isLoading = false;
+    if (res.error?.includes("invalid-credential")) {
+      showToast("Invalid Credentials !!", "error");
       return;
     }
     showToast("Something went wrong !!", "error");

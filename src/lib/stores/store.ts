@@ -1,5 +1,7 @@
 import { FieldValue } from "firebase/firestore";
 import { writable, type Writable } from "svelte/store";
+import { firebaseAuth } from "$lib/firebase/config.client";
+import { loginUser, logout, signupUser } from "$lib/firebase/user.client";
 
 export const tempUser: App.User = {
   username: "john",
@@ -9,16 +11,21 @@ export const tempUser: App.User = {
   updatedAt: FieldValue.prototype,
 };
 
-export const userStore: Writable<App.User | null> = writable(tempUser);
-
-export function setUser(newUser: App.User | null) {
-  userStore.set(newUser);
-}
-
-export function logout() {
-  userStore.set(null);
-}
-
-userStore.subscribe((val) => {
-  console.log("UserData value changes to : ", val);
+export const userStore: Writable<App.UserStore> = writable({
+  isUserLoading: true,
+  currentUser: null,
 });
+
+export const authHandlers = {
+  login: async ({ email, password }: App.LoginUserData) => {
+    const res = await loginUser({ email, password });
+    return res;
+  },
+  signup: async ({ username, email, password }: App.SignupUserData) => {
+    const res = await signupUser({ username, email, password });
+    return res;
+  },
+  signout: async () => {
+    await logout();
+  },
+};

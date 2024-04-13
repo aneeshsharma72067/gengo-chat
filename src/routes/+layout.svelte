@@ -1,16 +1,30 @@
-<script>
-  import { goto } from "$app/navigation";
-  import Toast from "$lib/components/ui/Toast.svelte";
+<script lang="ts">
   import "../app.css";
-  import { userStore } from "../lib/stores/store";
-  userStore.subscribe((data) => {
-    if (data) {
-      console.log("redirecting to /app because user found");
-      goto("/app");
-    } else {
-      console.log("redirecting to /auth/login because user not found");
-      goto("/auth/login");
-    }
+  import { firebaseAuth } from "$lib/firebase/config.client";
+  import { getUserData } from "$lib/firebase/user.client";
+  import Toast from "$lib/components/ui/Toast.svelte";
+  import { onMount } from "svelte";
+  import { userStore } from "$lib/stores/store";
+  import { goto } from "$app/navigation";
+
+  let loading: boolean = true;
+  onMount(() => {
+    loading = true;
+    const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
+      console.log(user);
+      if (user) {
+        const userData = (await getUserData(user.uid)) as App.User;
+        userStore.update((curr) => {
+          console.log("New User : ", userData);
+          return { ...curr, isUserLoading: false, currentUser: userData };
+        });
+        goto("/app");
+      } else {
+        console.log("goto login called from root layout");
+        goto("/auth/login");
+      }
+    });
+    loading = false;
   });
 </script>
 

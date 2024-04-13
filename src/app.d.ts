@@ -21,6 +21,19 @@ declare global {
       updatedAt: FieldValue;
       friends?: Array<String>;
     }
+    interface SignupUserData {
+      username: string;
+      email: string;
+      password: string;
+    }
+    interface LoginUserData {
+      email: string;
+      password: string;
+    }
+    interface UserStore {
+      isUserLoading: boolean;
+      currentUser: App.User | null;
+    }
   }
 }
 

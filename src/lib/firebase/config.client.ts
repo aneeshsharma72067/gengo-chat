@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { deleteApp, getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -16,6 +16,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+let app;
+if(!getApps().length){
+  app = initializeApp(firebaseConfig); 
+}
+else{
+  app = getApp();
+  deleteApp(app);
+  app = initializeApp(firebaseConfig); 
+}
 export const firebaseAuth = getAuth(app);
 export const firestore = getFirestore();
