@@ -6,7 +6,7 @@
   import { onMount } from "svelte";
   import { userStore } from "$lib/stores/store";
   import { goto } from "$app/navigation";
-
+  import { page } from "$app/stores";
   let loading: boolean = true;
   onMount(() => {
     loading = true;
@@ -18,8 +18,13 @@
           console.log("New User : ", userData);
           return { ...curr, isUserLoading: false, currentUser: userData };
         });
-        goto("/app");
+        if ($page.url.pathname.includes("auth")) {
+          goto("/app");
+        }
       } else {
+        userStore.update((curr) => {
+          return { ...curr, isUserLoading: false, currentUser: null };
+        });
         console.log("goto login called from root layout");
         goto("/auth/login");
       }
@@ -28,7 +33,13 @@
   });
 </script>
 
-<div class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800">
-  <Toast />
-  <slot />
-</div>
+{#if $userStore.isUserLoading}
+  <div class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800">
+    Loading...
+  </div>
+{:else}
+  <div class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800">
+    <Toast />
+    <slot />
+  </div>
+{/if}

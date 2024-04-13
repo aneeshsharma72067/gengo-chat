@@ -49,6 +49,10 @@
       showToast("Something Went Wrong !!", "error");
       throw new Error(res.error ?? undefined);
     }
+    userStore.set({
+      isUserLoading: false,
+      currentUser: res.userData as App.User,
+    });
     showToast("Signup successfull", "success");
     formData = {
       email: "",
