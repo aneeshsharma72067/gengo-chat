@@ -9,7 +9,7 @@ export const tempUser: App.User = {
   updatedAt: FieldValue.prototype,
 };
 
-export const userStore: Writable<App.User | null> = writable(null);
+export const userStore: Writable<App.User | null> = writable(tempUser);
 
 export function setUser(newUser: App.User | null) {
   userStore.set(newUser);

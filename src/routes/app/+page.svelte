@@ -4,17 +4,18 @@
   import Button from "$lib/components/ui/Button.svelte";
   import { showToast } from "$lib/components/func/toasts";
   import { _logoutUser } from "./+page";
+  import { redirect } from "@sveltejs/kit";
 
   const handleLogout = async () => {
     const res = await _logoutUser();
     setUser(null);
     console.log(res);
+    showToast("Logged out succesfully", "success");
   };
 
   userStore.subscribe((data) => {
     if (!data) {
-      showToast("Logged out succesfully", "success");
-      goto("/auth/login");
+      redirect(302, "/auth/login");
     }
   });
 </script>

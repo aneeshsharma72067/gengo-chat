@@ -5,10 +5,10 @@
   import { userStore } from "../lib/stores/store";
   userStore.subscribe((data) => {
     if (data) {
-      console.log("redirected because user found");
+      console.log("redirecting to /app because user found");
       goto("/app");
     } else {
-      console.log("redirected because user not found");
+      console.log("redirecting to /auth/login because user not found");
       goto("/auth/login");
     }
   });

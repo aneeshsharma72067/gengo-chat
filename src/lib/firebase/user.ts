@@ -78,7 +78,6 @@ export const signupUser = async (userData: SignupUserData) => {
       friends: [],
     };
     const result = await addDoc(collection(firestore, "users"), user);
-    console.log(user);
     return {
       success: true,
       error: null,
@@ -111,11 +110,16 @@ export const checkAuth = async () => {
       if (user) {
         try {
           const currentUser = await getUserData(user.uid);
+          console.log(
+            " > firebase/user.ts | User resolved, user data :",
+            currentUser
+          );
           resolve(currentUser);
         } catch (error) {
           reject(error);
         }
       } else {
+        console.log(" > firebase/user.ts | No user found:");
         resolve(null);
       }
       unsubscribe();
@@ -125,8 +129,8 @@ export const checkAuth = async () => {
 
 export const logout = async () => {
   await signOut(firebaseAuth)
-    .then((res) => {
-      console.log(res, "logged out");
+    .then(() => {
+      console.log("logged out");
     })
     .catch((err) => {
       console.log(err, "Error in logging out");

@@ -3,11 +3,9 @@ import { json } from "@sveltejs/kit";
 
 export async function POST({ request }) {
   const formData = await request.json();
-  console.log(formData);
+
   const response = await loginUser(formData);
-  return json({
-    response,
-  });
+  return json(response);
 }
 export async function GET({ request }) {
   return json({

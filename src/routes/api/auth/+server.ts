@@ -3,7 +3,7 @@ import { json } from "@sveltejs/kit";
 
 export async function GET({ url }) {
   const user = await checkAuth();
-  console.log(user);
+  console.log("logging user from +server.ts in auth : ",user);
   return json(user);
 }
 

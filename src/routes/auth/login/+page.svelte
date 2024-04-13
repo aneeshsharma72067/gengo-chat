@@ -41,12 +41,12 @@
       return;
     }
     const res = await _hanldeLogin(formData);
-    console.log(res);
-    if (res.response.success) {
-      userStore.set(res.response.userData);
+    console.log("res for +page.svelte in login : ", res);
+    if (res.success) {
+      userStore.set(res.userData);
       showToast("Logged In Successfully", "success");
-      goto("/app");
       isLoading = false;
+      goto("/app");
       return;
     }
     showToast("Something went wrong !!", "error");
