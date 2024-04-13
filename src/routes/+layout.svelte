@@ -8,6 +8,7 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   let loading: boolean = true;
+
   onMount(() => {
     loading = true;
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
@@ -31,6 +32,7 @@
     });
     loading = false;
   });
+  
 </script>
 
 {#if $userStore.isUserLoading}
