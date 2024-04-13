@@ -4,13 +4,20 @@
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
   import Wave from "$lib/components/ui/Wave.svelte";
   import { _hanldeLogin } from "./+page";
-  import { userStore } from "$lib/stores/user";
+  import { userStore, setUser, tempUser } from "../../../lib/stores/store";
+  import { goto } from "$app/navigation";
+  import { showToast } from "$lib/components/func/toasts";
 
-  type HTMLFormData = {
+  userStore.subscribe((data) => {
+    if (data) {
+      goto("/app");
+    }
+  });
+  type UserLoginData = {
     email: string;
     password: string;
   };
-  const formData: HTMLFormData = {
+  const formData: UserLoginData = {
     email: "",
     password: "",
   };
@@ -34,9 +41,15 @@
       return;
     }
     const res = await _hanldeLogin(formData);
-    userStore.set(res.response.userData);
-    isLoading = false;
     console.log(res);
+    if (res.response.success) {
+      userStore.set(res.response.userData);
+      showToast("Logged In Successfully", "success");
+      goto("/app");
+      isLoading = false;
+      return;
+    }
+    showToast("Something went wrong !!", "error");
   };
 </script>
 
@@ -72,7 +85,7 @@
         label="Password"
         placeholder="Enter your password..."
         bind:value={formData.password}
-        error={formData.password.length <= 6 ? passwordError : ""}
+        error={formData.password.length < 6 ? passwordError : ""}
       />
       <Button class="w-full my-2" on:click={hanldeSubmit} {isLoading}
         >Submit</Button

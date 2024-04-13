@@ -1,7 +1,9 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut,
   type UserCredential,
 } from "firebase/auth";
 import { app, firebaseAuth, firestore } from "./config";
@@ -14,7 +16,6 @@ import {
   serverTimestamp,
   where,
 } from "firebase/firestore";
-import { setUser, userStore } from "$lib/stores/user";
 
 type SignupUserData = {
   username: string;
@@ -91,4 +92,43 @@ export const signupUser = async (userData: SignupUserData) => {
       error: errorMessage,
     };
   }
+};
+
+export const getUserData = async (uid: string) => {
+  const userSnapShot = await getDocs(
+    query(collection(firestore, "users"), where("uid", "==", uid))
+  );
+  if (userSnapShot.empty) {
+    return;
+  }
+  const user = userSnapShot.docs[0].data();
+  return user;
+};
+
+export const checkAuth = async () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
+      if (user) {
+        try {
+          const currentUser = await getUserData(user.uid);
+          resolve(currentUser);
+        } catch (error) {
+          reject(error);
+        }
+      } else {
+        resolve(null);
+      }
+      unsubscribe();
+    });
+  });
+};
+
+export const logout = async () => {
+  await signOut(firebaseAuth)
+    .then((res) => {
+      console.log(res, "logged out");
+    })
+    .catch((err) => {
+      console.log(err, "Error in logging out");
+    });
 };

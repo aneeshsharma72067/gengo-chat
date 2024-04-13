@@ -1,4 +1,13 @@
-import type { Load } from "@sveltejs/kit";
 
-/**@type {import('./$types').PageLoad}*/
-export const load: Load = async () => {};
+export const _logoutUser = async () => {
+    const res = await fetch("/api/auth/logout", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    return await res.json();
+}
+
+
+export const ssr = false;

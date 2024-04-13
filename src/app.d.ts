@@ -19,7 +19,7 @@ declare global {
       bio?: string;
       createdAt: FieldValue;
       updatedAt: FieldValue;
-      friends: Array<String>;
+      friends?: Array<String>;
     }
   }
 }

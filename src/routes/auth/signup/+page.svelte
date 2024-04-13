@@ -4,7 +4,7 @@
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
   import Wave from "$lib/components/ui/Wave.svelte";
   import { _hanldeSignup } from "./+page";
-  import { userStore } from "$lib/stores/user";
+  import { userStore } from "../../../lib/stores/store";
 
   type UserSignupData = {
     email: string;
@@ -51,7 +51,7 @@
       console.log(res.response.error);
       return;
     }
-    console.log(res.response.user);
+    console.log(res.response.userData);
     formData = {
       email: "",
       password: "",
