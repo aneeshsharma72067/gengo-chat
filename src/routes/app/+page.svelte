@@ -23,4 +23,6 @@
     ></div>
   {/if}
   <Button on:click={handleLogout}>Logout</Button>
+
+  <a href="/app/profile">Profile</a>
 </main>

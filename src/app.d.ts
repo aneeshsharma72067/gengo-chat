@@ -20,6 +20,7 @@ declare global {
       createdAt: FieldValue;
       updatedAt: FieldValue;
       friends?: Array<String>;
+      socialMedia:Map<string, string>
     }
     interface SignupUserData {
       username: string;

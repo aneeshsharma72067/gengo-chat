@@ -7,6 +7,7 @@
   import { userStore } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import Loader from "$lib/components/ui/Loader.svelte";
   let loading: boolean = true;
 
   onMount(() => {
@@ -19,7 +20,7 @@
           console.log("New User : ", userData);
           return { ...curr, isUserLoading: false, currentUser: userData };
         });
-        if ($page.url.pathname.includes("auth")) {
+        if ($page.url.pathname.includes("auth") || $page.url.pathname == "/") {
           goto("/app");
         }
       } else {
@@ -32,15 +33,19 @@
     });
     loading = false;
   });
-  
 </script>
 
 {#if $userStore.isUserLoading}
-  <div class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800">
+  <div
+    class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800 overflow-hidden"
+  >
+    <Loader />
     Loading...
   </div>
 {:else}
-  <div class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800">
+  <div
+    class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800 overflow-hidden"
+  >
     <Toast />
     <slot />
   </div>
