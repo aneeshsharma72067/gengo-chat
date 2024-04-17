@@ -33,10 +33,6 @@
     stroke: currentColor;
   }
 
-  .MuiCircularProgress-circleStatic {
-    transition: stroke-dashoffset 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0s;
-  }
-
   .loader-circle-animation {
     animation: rotate-inner08 1.4s ease-in-out infinite;
     stroke-dasharray: 80px, 200px;
