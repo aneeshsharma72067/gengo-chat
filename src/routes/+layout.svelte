@@ -7,7 +7,7 @@
   import { userStore } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import Loader from "$lib/components/ui/Loader.svelte";
+  import PageLoader from "$lib/components/ui/PageLoader.svelte";
   let loading: boolean = true;
 
   onMount(() => {
@@ -39,8 +39,9 @@
   <div
     class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800 overflow-hidden"
   >
-    <Loader />
-    Loading...
+    <div class="w-full h-1/2 flex items-center justify-center">
+      <PageLoader />
+    </div>
   </div>
 {:else}
   <div
