@@ -71,7 +71,9 @@
     </section>
     <section class="w-full py-4 bg-white rounded-3xl min-h-svh">
       <div class="w-[90%] mx-auto">
-        <div class="flex items-center gap-4 border-2 border-indigo-400 rounded-3xl pl-3 overflow-hidden">
+        <div
+          class="flex items-center gap-4 border-2 border-indigo-400 rounded-3xl pl-3 overflow-hidden"
+        >
           <Search fill="#4e3ee6" size={30} />
           <input
             type="text"
@@ -81,31 +83,43 @@
         </div>
       </div>
       <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
-        <div class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200">
+        <div
+          class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200"
+        >
           <div class="flex-[0.1]">
-            <UserIcon fill="#4e3ee6" size={50}/>
+            <UserIcon fill="#4e3ee6" size={50} />
           </div>
           <div class="flex flex-[0.9] flex-col items-start gap-1">
             <div>Mia</div>
-            <div class="text-sm text-slate-400">Lorem ipsum, dolor sit amet consectetur ...</div>
+            <div class="text-sm text-slate-400">
+              Lorem ipsum, dolor sit amet consectetur ...
+            </div>
           </div>
         </div>
-         <div class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200">
+        <div
+          class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200"
+        >
           <div class="flex-[0.1]">
-            <UserIcon fill="#4e3ee6" size={50}/>
+            <UserIcon fill="#4e3ee6" size={50} />
           </div>
           <div class="flex flex-[0.9] flex-col items-start gap-1">
             <div>John</div>
-            <div class="text-sm text-slate-400">Lorem ipsum, dolor sit amet consectetur ...</div>
+            <div class="text-sm text-slate-400">
+              Lorem ipsum, dolor sit amet consectetur ...
+            </div>
           </div>
         </div>
-         <div class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200">
+        <div
+          class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200"
+        >
           <div class="flex-[0.1]">
-            <UserIcon fill="#4e3ee6" size={50}/>
+            <UserIcon fill="#4e3ee6" size={50} />
           </div>
           <div class="flex flex-[0.9] flex-col items-start gap-1">
             <div>Alex</div>
-            <div class="text-sm text-slate-400">Lorem ipsum, dolor sit amet consectetur ...</div>
+            <div class="text-sm text-slate-400">
+              Lorem ipsum, dolor sit amet consectetur ...
+            </div>
           </div>
         </div>
       </div>
