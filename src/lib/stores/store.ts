@@ -1,7 +1,12 @@
 import { FieldValue } from "firebase/firestore";
 import { writable, type Writable } from "svelte/store";
 import { firebaseAuth } from "$lib/firebase/config.client";
-import { loginUser, logout, signupUser } from "$lib/firebase/user.client";
+import {
+  getAllUsers,
+  loginUser,
+  logout,
+  signupUser,
+} from "$lib/firebase/user.client";
 
 export const tempUser: App.User = {
   username: "john",
@@ -27,5 +32,12 @@ export const authHandlers = {
   },
   signout: async () => {
     await logout();
+  },
+};
+
+export const dataHandlers = {
+  getAllUses: async () => {
+    const res = await getAllUsers();
+    return res;
   },
 };

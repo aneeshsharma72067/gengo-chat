@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
   import { userStore } from "../../lib/stores/store";
   import { showToast } from "$lib/components/func/toasts";
   import { redirect } from "@sveltejs/kit";
-  import { authHandlers } from "$lib/stores/store";
+  import { authHandlers, dataHandlers } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { slide, fade, blur, scale } from "svelte/transition";
+  import { onMount } from "svelte";
 
   // Component Imports
   import Button from "$lib/components/ui/Button.svelte";
@@ -13,8 +14,14 @@
   import Settings from "$lib/components/Icons/Settings.svelte";
   import Logout from "$lib/components/Icons/Logout.svelte";
   import Search from "$lib/components/Icons/Search.svelte";
+  import Chat from "$lib/components/ui/Chat.svelte";
+  import ChatSkeletonLoader from "$lib/components/ui/ChatSkeletonLoader.svelte";
+  import ChatPage from "$lib/components/ui/ChatPage.svelte";
 
-  let showMenu = false;
+  let showMenu: boolean = false;
+  let chatIsOpen: boolean = false;
+  let users: Array<App.User> = [];
+
   if (!$userStore.currentUser && !$userStore.isUserLoading) {
     goto("/auth/login");
   }
@@ -22,10 +29,22 @@
     await authHandlers.signout();
     showToast("Logged out succesfully", "success");
   };
+  onMount(async () => {
+    users = await dataHandlers.getAllUses();
+    console.log(users);
+  });
 </script>
 
 <main>
   <div class="w-full flex flex-col bg-[#4e3ee6] min-h-screen relative">
+    {#if chatIsOpen}
+      <section
+        class="absolute top-0 left-0 z-50 min-h-screen min-w-full mx-auto bg-indigo-200 duration-300"
+        transition:slide={{ axis: "x" }}
+      >
+        Chat Page
+      </section>
+    {/if}
     {#if showMenu}
       <section
         class="absolute top-[5.5rem] right-2 text-white"
@@ -82,47 +101,24 @@
           />
         </div>
       </div>
-      <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
-        <div
-          class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200"
-        >
-          <div class="flex-[0.1]">
-            <UserIcon fill="#4e3ee6" size={50} />
-          </div>
-          <div class="flex flex-[0.9] flex-col items-start gap-1">
-            <div>Mia</div>
-            <div class="text-sm text-slate-400">
-              Lorem ipsum, dolor sit amet consectetur ...
-            </div>
-          </div>
+      {#if users.length == 0}
+        <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
+          <ChatSkeletonLoader />
+          <ChatSkeletonLoader />
+          <ChatSkeletonLoader />
         </div>
-        <div
-          class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200"
-        >
-          <div class="flex-[0.1]">
-            <UserIcon fill="#4e3ee6" size={50} />
-          </div>
-          <div class="flex flex-[0.9] flex-col items-start gap-1">
-            <div>John</div>
-            <div class="text-sm text-slate-400">
-              Lorem ipsum, dolor sit amet consectetur ...
-            </div>
-          </div>
+      {:else}
+        <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
+          {#each users as user}
+            <Chat
+              {user}
+              on:click={() => {
+                chatIsOpen = !chatIsOpen;
+              }}
+            />
+          {/each}
         </div>
-        <div
-          class="flex gap-2 duration-300 rounded-3xl p-3 cursor-pointer hover:bg-slate-200"
-        >
-          <div class="flex-[0.1]">
-            <UserIcon fill="#4e3ee6" size={50} />
-          </div>
-          <div class="flex flex-[0.9] flex-col items-start gap-1">
-            <div>Alex</div>
-            <div class="text-sm text-slate-400">
-              Lorem ipsum, dolor sit amet consectetur ...
-            </div>
-          </div>
-        </div>
-      </div>
+      {/if}
     </section>
   </div>
 </main>

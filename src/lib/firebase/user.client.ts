@@ -72,7 +72,7 @@ export const signupUser = async (userData: App.SignupUserData) => {
     };
   } catch (error) {
     const errorMessage = (error as FirebaseError)?.message;
-    console.log((error as FirebaseError)?.message+'|');
+    console.log((error as FirebaseError)?.message + "|");
     return {
       success: false,
       error: errorMessage,
@@ -99,4 +99,16 @@ export const logout = async () => {
     .catch((err) => {
       console.log(err, "Error in logging out");
     });
+};
+
+export const getAllUsers = async () => {
+  const users = await getDocs(collection(firestore, "users"));
+  const userList: Array<any> = [];
+  users.forEach((user) => {
+    userList.push({
+      uid: user.id,
+      ...user.data(),
+    });
+  });
+  return userList;
 };

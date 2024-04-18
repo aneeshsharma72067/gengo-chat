@@ -4,17 +4,12 @@
   import Email from "$lib/components/Icons/Email.svelte";
   import Instagram from "$lib/components/Icons/Instagram.svelte";
   import ChevronBack from "$lib/components/Icons/ChevronBack.svelte";
+  import GoBack from "$lib/components/ui/GoBack.svelte";
 </script>
 
 {#if $userStore.currentUser}
   <div class="relative">
-    <a
-      href="/app"
-      class="absolute z-30 top-5 left-5 flex gap-1 duration-300 items-center justify-center rounded-full bg-white px-3 py-1 hover:bg-slate-200 cursor-pointer"
-    >
-      <span><ChevronBack size={20} strokecolor="black" /></span>
-      <span class="text-slate-700">Back</span>
-    </a>
+    <GoBack to="/app" />
     <div class="relative w-full h-32">
       <GradientBackground />
     </div>
