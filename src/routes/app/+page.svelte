@@ -1,10 +1,9 @@
 <script lang="ts">
   import { userStore } from "../../lib/stores/store";
   import { showToast } from "$lib/components/func/toasts";
-  import { redirect } from "@sveltejs/kit";
   import { authHandlers, dataHandlers } from "$lib/stores/store";
   import { goto } from "$app/navigation";
-  import { slide, fade, blur, scale } from "svelte/transition";
+  import { slide } from "svelte/transition";
   import { onMount } from "svelte";
 
   // Component Imports
@@ -17,9 +16,11 @@
   import Chat from "$lib/components/ui/Chat.svelte";
   import ChatSkeletonLoader from "$lib/components/ui/ChatSkeletonLoader.svelte";
   import ChatPage from "$lib/components/ui/ChatPage.svelte";
+  import ChevronBack from "$lib/components/Icons/ChevronBack.svelte";
+  import EllipsisVertical from "$lib/components/Icons/EllipsisVertical.svelte";
 
   let showMenu: boolean = false;
-  let chatIsOpen: boolean = false;
+  let chatIsOpen: boolean = true;
   let users: Array<App.User> = [];
 
   if (!$userStore.currentUser && !$userStore.isUserLoading) {
@@ -28,6 +29,9 @@
   const handleLogout = async () => {
     await authHandlers.signout();
     showToast("Logged out succesfully", "success");
+  };
+  const toggleChat = () => {
+    chatIsOpen = !chatIsOpen;
   };
   onMount(async () => {
     users = await dataHandlers.getAllUses();
@@ -39,10 +43,9 @@
   <div class="w-full flex flex-col bg-[#4e3ee6] min-h-screen relative">
     {#if chatIsOpen}
       <section
-        class="absolute top-0 left-0 z-50 min-h-screen min-w-full mx-auto bg-indigo-200 duration-300"
-        transition:slide={{ axis: "x" }}
+        class="absolute top-0 right-0 z-50 h-screen w-screen mx-auto bg-indigo-200 duration-300"
       >
-        Chat Page
+        
       </section>
     {/if}
     {#if showMenu}
@@ -110,12 +113,7 @@
       {:else}
         <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
           {#each users as user}
-            <Chat
-              {user}
-              on:click={() => {
-                chatIsOpen = !chatIsOpen;
-              }}
-            />
+            <Chat {user} on:click={toggleChat} />
           {/each}
         </div>
       {/if}
