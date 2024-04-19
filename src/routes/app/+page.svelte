@@ -18,6 +18,7 @@
   import ChatPage from "$lib/components/ui/ChatPage.svelte";
   import ChevronBack from "$lib/components/Icons/ChevronBack.svelte";
   import EllipsisVertical from "$lib/components/Icons/EllipsisVertical.svelte";
+  import Send from "$lib/components/Icons/Send.svelte";
 
   let showMenu: boolean = false;
   let chatIsOpen: boolean = true;
@@ -45,7 +46,7 @@
       <section
         class="absolute top-0 right-0 z-50 h-screen w-screen mx-auto bg-indigo-200 duration-300"
       >
-        <div class="flex flex-col w-[95%] mx-auto my-1">
+        <div class="flex flex-col w-[95%] h-full mx-auto py-3 justify-between">
           <div
             class="flex items-center gap-4 justify-between bg-indigo-600 px-3 py-2 rounded-full"
           >
@@ -66,6 +67,20 @@
           </div>
           <div>
             <ChatPage />
+          </div>
+          <div class="">
+            <div class="flex gap-4">
+              <input
+                type="text"
+                name="messageInput"
+                id="messageInput"
+                class="border-none w-full outline-none rounded-full px-4 py-2"
+                 placeholder="Enter a Message..."
+              />
+              <button class="flex items-center justify-center rounded-full bg-indigo-500 p-3 duration-100 hover:bg-[#4e3ee6]">
+                <Send size={25} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
