@@ -44,9 +44,9 @@
   <div class="w-full flex flex-col bg-[#4e3ee6] min-h-screen relative">
     {#if chatIsOpen}
       <section
-        class="absolute top-0 right-0 z-50 h-screen w-screen mx-auto bg-indigo-200 duration-300"
+        class="absolute top-0 right-0 z-50 h-screen w-screen mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"
       >
-        <div class="flex flex-col w-[95%] h-full mx-auto py-3 justify-between">
+        <div class="flex flex-col w-[95%] gap-3 h-full max-h-full mx-auto py-3 justify-between">
           <div
             class="flex items-center gap-4 justify-between bg-indigo-600 px-3 py-2 rounded-full"
           >
@@ -65,7 +65,7 @@
               <EllipsisVertical size={20} />
             </div>
           </div>
-          <div>
+          <div class="w-full h-full">
             <ChatPage />
           </div>
           <div class="">
