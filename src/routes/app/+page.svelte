@@ -46,7 +46,9 @@
       <section
         class="absolute top-0 right-0 z-50 h-screen w-screen mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"
       >
-        <div class="flex flex-col w-[95%] gap-3 h-full max-h-full mx-auto py-3 justify-between">
+        <div
+          class="flex flex-col w-[95%] gap-3 h-full max-h-full mx-auto py-3 justify-between"
+        >
           <div
             class="flex items-center gap-4 justify-between bg-indigo-600 px-3 py-2 rounded-full"
           >
@@ -75,9 +77,11 @@
                 name="messageInput"
                 id="messageInput"
                 class="border-none w-full outline-none rounded-full px-4 py-2"
-                 placeholder="Enter a Message..."
+                placeholder="Enter a Message..."
               />
-              <button class="flex items-center justify-center rounded-full bg-indigo-500 p-3 duration-100 hover:bg-[#4e3ee6]">
+              <button
+                class="flex items-center justify-center rounded-full bg-indigo-500 p-3 duration-100 hover:bg-[#4e3ee6]"
+              >
                 <Send size={25} />
               </button>
             </div>
