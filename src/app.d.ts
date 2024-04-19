@@ -35,6 +35,17 @@ declare global {
       isUserLoading: boolean;
       currentUser: App.User | null;
     }
+    interface Message {
+      content: string;
+      sendersId: string;
+      receiversId: string;
+      sentAt: FieldValue;
+      chatid?: string;
+    }
+    interface Chat {
+      chatid: string;
+      messages?: Array<Message>;
+    }
   }
 }
 
