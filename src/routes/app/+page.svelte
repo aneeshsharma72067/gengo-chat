@@ -24,13 +24,16 @@
   let showMenu: boolean = false;
   let chatIsOpen: boolean = false;
   let users: Array<App.User> = [];
-  let message: App.Message = {
+  const message: App.Message = {
     content: "",
     sendersId: $userStore.currentUser ? $userStore.currentUser.uid : "",
     receiversId: $chatStore.chattingWith ? $chatStore.chattingWith.uid : "",
     chatid: $chatStore.chatData?.chatid,
   };
-
+  chatStore.subscribe((val) => {
+    message.receiversId = val.chattingWith ? val.chattingWith.uid : null;
+    message.chatid = val.chatData?.chatid;
+  });
   if (!$userStore.currentUser && !$userStore.isUserLoading) {
     goto("/auth/login");
   }
@@ -53,12 +56,6 @@
         isChatLoading: false,
       });
     }
-    message = {
-      content: "",
-      sendersId: $userStore.currentUser ? $userStore.currentUser.uid : "",
-      receiversId: $chatStore.chattingWith ? $chatStore.chattingWith.uid : "",
-      chatid: $chatStore.chatData?.chatid,
-    };
     chatIsOpen = !chatIsOpen;
   };
 
@@ -69,9 +66,9 @@
   onMount(async () => {
     if ($userStore.currentUser) {
       users = await dataHandlers.getAllUsers($userStore.currentUser.uid);
-      console.log(users);
     }
   });
+  let msg = "";
 </script>
 
 <main>
@@ -119,7 +116,11 @@
                 class="border-none w-full outline-none rounded-full px-4 py-2"
                 placeholder="Enter a Message..."
                 bind:value={message.content}
-               
+                on:keydown={(e) => {
+                  if (e.key === "Enter") {
+                    sendMessage();
+                  }
+                }}
               />
               <button
                 on:click={sendMessage}

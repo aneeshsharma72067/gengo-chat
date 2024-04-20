@@ -1,3 +1,4 @@
+import { addMessage } from "$lib/firebase/chat.client";
 import { writable, type Writable } from "svelte/store";
 
 export const chatStore: Writable<App.ChatStore> = writable({
@@ -9,5 +10,7 @@ export const chatStore: Writable<App.ChatStore> = writable({
 export const chattingWithStore: Writable<string | null> = writable(null);
 
 export const chatHandlers = {
-  getChatFromId: async () => {},
+  sendMessage: async (message:App.Message) => {
+    const res = await addMessage(message);
+  }
 };

@@ -17,13 +17,18 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let app;
-if(!getApps().length){
-  app = initializeApp(firebaseConfig); 
-}
-else{
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
   app = getApp();
   deleteApp(app);
-  app = initializeApp(firebaseConfig); 
+  app = initializeApp(firebaseConfig);
 }
 export const firebaseAuth = getAuth(app);
 export const firestore = getFirestore();
+
+export const firestoreCollections = {
+  USERS: "users",
+  MESSAGES: "messages",
+  CHATS: "chats",
+};

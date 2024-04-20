@@ -3,16 +3,16 @@
   import Message from "./Message.svelte";
   import { chatStore } from "$lib/stores/chatStore";
   import { collection, doc, onSnapshot } from "firebase/firestore";
-  import { firestore } from "$lib/firebase/config.client";
+  import { firestore, firestoreCollections } from "$lib/firebase/config.client";
   onMount(() => {
     console.log("fetching the chat's");
     const chatId = $chatStore.chatData?.chatid;
     if (!chatId) {
       console.log("No Chat because it has not been initiated");
       return;
-    }
+    } 
     const unsubscribe = onSnapshot(
-      collection(firestore, "messages"),
+      collection(firestore, firestoreCollections.MESSAGES),
       (snapshot) => {
         chatStore.set({
           ...$chatStore,
@@ -39,10 +39,5 @@
 </script>
 
 <div class="w-full h-[75vh] overflow-y-scroll flex items-start justify-center">
-  <div class="w-full flex flex-col px-3 gap-3">
-    <Message align="right" />
-    <Message />
-    <Message align="right" />
-    <Message />
-  </div>
+  <div class="w-full flex flex-col px-3 gap-3"></div>
 </div>

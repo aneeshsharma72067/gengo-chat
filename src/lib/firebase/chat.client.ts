@@ -1,29 +1,50 @@
-import { addDoc, collection, getDocs, or, query, serverTimestamp, where } from "firebase/firestore";
-import { firestore } from "./config.client";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  or,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
+import { firestore, firestoreCollections } from "./config.client";
 import type { FirebaseError } from "firebase/app";
+import { v4 as uuid4 } from "uuid";
 
-const addMessage = async (message: App.Message) => {
+export const addMessage = async (message: App.Message) => {
   try {
-    const {chatid} = message
-    if(chatid){
+    const { chatid } = message;
+    if (chatid) {
       const messageSnapshot = await addDoc(
-        collection(firestore, 'messages'), {
+        collection(firestore, firestoreCollections.MESSAGES),
+        {
           ...message,
-          sentAt:serverTimestamp()
+          sentAt: serverTimestamp(),
         }
-      )
+      );
       return {
-        success:true,
-        error:null
-      }
+        success: true,
+        error: null,
+        data: {
+          chatid: chatid,
+        },
+      };
     }
+    const newChatId = uuid4();
     const messageSnapshot = await addDoc(
-      collection(firestore, "messages"),
-      message
+      collection(firestore, firestoreCollections.MESSAGES),
+      {
+        ...message,
+        chatid: newChatId,
+        sentAt: serverTimestamp(),
+      }
     );
     return {
       success: true,
       error: null,
+      data: {
+        chatid: newChatId,
+      },
     };
   } catch (err) {
     return {

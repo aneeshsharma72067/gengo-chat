@@ -38,7 +38,7 @@ declare global {
     interface Message {
       content: string;
       sendersId: string;
-      receiversId: string;
+      receiversId: string | null;
       sentAt?: FieldValue;
       chatid?: string;
     }
