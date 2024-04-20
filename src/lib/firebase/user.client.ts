@@ -101,8 +101,10 @@ export const logout = async () => {
     });
 };
 
-export const getAllUsers = async () => {
-  const users = await getDocs(collection(firestore, "users"));
+export const getAllUsers = async (uid: string) => {
+  const users = await getDocs(
+    query(collection(firestore, "users"), where("uid", "!=", uid))
+  );
   const userList: Array<any> = [];
   users.forEach((user) => {
     userList.push({

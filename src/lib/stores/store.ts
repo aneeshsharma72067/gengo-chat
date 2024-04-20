@@ -36,8 +36,8 @@ export const authHandlers = {
 };
 
 export const dataHandlers = {
-  getAllUses: async () => {
-    const res = await getAllUsers();
+  getAllUsers: async (uid:string) => {
+    const res = await getAllUsers(uid);
     return res;
   },
 };

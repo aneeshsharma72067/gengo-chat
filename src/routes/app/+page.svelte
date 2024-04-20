@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { userStore } from "../../lib/stores/store";
+  import { userStore } from "$lib/stores/store";
   import { showToast } from "$lib/components/func/toasts";
   import { authHandlers, dataHandlers } from "$lib/stores/store";
   import { goto } from "$app/navigation";
   import { slide } from "svelte/transition";
   import { onMount } from "svelte";
+  import { chattingWithStore, chatStore } from "$lib/stores/chatStore";
 
   // Component Imports
   import Button from "$lib/components/ui/Button.svelte";
@@ -21,8 +22,14 @@
   import Send from "$lib/components/Icons/Send.svelte";
 
   let showMenu: boolean = false;
-  let chatIsOpen: boolean = true;
+  let chatIsOpen: boolean = false;
   let users: Array<App.User> = [];
+  let message: App.Message = {
+    content: "",
+    sendersId: $userStore.currentUser ? $userStore.currentUser.uid : "",
+    receiversId: $chatStore.chattingWith ? $chatStore.chattingWith.uid : "",
+    chatid: $chatStore.chatData?.chatid,
+  };
 
   if (!$userStore.currentUser && !$userStore.isUserLoading) {
     goto("/auth/login");
@@ -31,12 +38,39 @@
     await authHandlers.signout();
     showToast("Logged out succesfully", "success");
   };
-  const toggleChat = () => {
+
+  const toggleChat = (user?: App.User) => {
+    if (chatIsOpen) {
+      chatStore.set({
+        chatData: null,
+        chattingWith: null,
+        isChatLoading: false,
+      });
+    } else {
+      chatStore.set({
+        ...$chatStore,
+        chattingWith: user || null,
+        isChatLoading: false,
+      });
+    }
+    message = {
+      content: "",
+      sendersId: $userStore.currentUser ? $userStore.currentUser.uid : "",
+      receiversId: $chatStore.chattingWith ? $chatStore.chattingWith.uid : "",
+      chatid: $chatStore.chatData?.chatid,
+    };
     chatIsOpen = !chatIsOpen;
   };
+
+  const sendMessage = async () => {
+    console.log(message);
+  };
+
   onMount(async () => {
-    users = await dataHandlers.getAllUses();
-    console.log(users);
+    if ($userStore.currentUser) {
+      users = await dataHandlers.getAllUsers($userStore.currentUser.uid);
+      console.log(users);
+    }
   });
 </script>
 
@@ -53,7 +87,7 @@
             class="flex items-center gap-4 justify-between bg-indigo-600 px-3 py-2 rounded-full"
           >
             <button
-              on:click={toggleChat}
+              on:click={() => toggleChat()}
               class="flex gap-1 duration-300 items-center justify-center rounded-full bg-white px-2 py-1 hover:bg-slate-200 cursor-pointer"
             >
               <span><ChevronBack size={17} strokecolor="black" /></span>
@@ -61,7 +95,13 @@
             </button>
             <div class="flex items-center justify-start w-full gap-2">
               <UserIcon size={40} />
-              <p class="text-lg text-white">John Doe</p>
+              <p class="text-lg text-white">
+                {#if $chatStore.isChatLoading || !$chatStore.chattingWith}
+                  Loading...
+                {:else}
+                  {$chatStore.chattingWith?.username}
+                {/if}
+              </p>
             </div>
             <div>
               <EllipsisVertical size={20} />
@@ -78,8 +118,11 @@
                 id="messageInput"
                 class="border-none w-full outline-none rounded-full px-4 py-2"
                 placeholder="Enter a Message..."
+                bind:value={message.content}
+               
               />
               <button
+                on:click={sendMessage}
                 class="flex items-center justify-center rounded-full bg-indigo-500 p-3 duration-100 hover:bg-[#4e3ee6]"
               >
                 <Send size={25} />
@@ -154,7 +197,7 @@
       {:else}
         <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
           {#each users as user}
-            <Chat {user} on:click={toggleChat} />
+            <Chat {user} on:click={() => toggleChat(user)} />
           {/each}
         </div>
       {/if}

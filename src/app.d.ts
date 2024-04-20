@@ -39,12 +39,17 @@ declare global {
       content: string;
       sendersId: string;
       receiversId: string;
-      sentAt: FieldValue;
+      sentAt?: FieldValue;
       chatid?: string;
     }
     interface Chat {
       chatid: string;
       messages?: Array<Message>;
+    }
+    interface ChatStore {
+      chatData: Chat | null;
+      isChatLoading: boolean;
+      chattingWith: App.User | null;
     }
   }
 }
