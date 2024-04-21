@@ -1,11 +1,16 @@
 <script>
   export let size = 46;
   export let fill = "white";
+  export let strokeColor = "black";
+  export let strokeWidth = 0;
 </script>
+
 <svg
   width={size}
   height={size}
-  fill={fill}
+  stroke={strokeColor}
+  {fill}
+  stroke-width={strokeWidth}
   viewBox="0 0 24 24"
   xmlns="http://www.w3.org/2000/svg"
 >

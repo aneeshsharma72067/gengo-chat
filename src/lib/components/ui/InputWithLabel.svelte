@@ -2,20 +2,20 @@
   export let label: string;
   export let name: string;
   export let type: string;
-  export const icon: string = "mail" || "password";
+  export const icon: "mail" | "password" | "A" = "mail";
   export let placeholder: string;
   export let value: string;
   export let error: string = "";
 </script>
 
-<div class="w-full flex flex-col gap-4">
+<div class="w-full flex flex-col gap-4 {$$restProps.class}">
   <label for={name}>{label}</label>
   {#if type === "email"}
     <input
       type="email"
       bind:value
       {name}
-      class="{$$restProps.class} px-5 py-2 rounded-md outline-none"
+      class="px-5 py-2 rounded-md outline-none"
       {placeholder}
     />
   {:else if type === "password"}
@@ -23,7 +23,7 @@
       type="password"
       bind:value
       {name}
-      class="{$$restProps.class} px-5 py-2 rounded-md outline-none"
+      class="px-5 py-2 rounded-md outline-none"
       {placeholder}
     />
   {:else if type === "text"}
@@ -31,7 +31,7 @@
       type="text"
       bind:value
       {name}
-      class="{$$restProps.class} px-5 py-2 rounded-md outline-none"
+      class="px-5 py-2 rounded-md outline-none"
       {placeholder}
     />
   {/if}

@@ -8,4 +8,5 @@ a{
 
 ::-webkit-scrollbar{
     display: none;
+    color: rgba(118, 103, 255, 0.42);
 }

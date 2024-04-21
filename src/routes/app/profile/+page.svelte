@@ -10,7 +10,7 @@
 {#if $userStore.currentUser}
   <div class="relative">
     <div class="flex w-full p-5 justify-between">
-      <GoTo to="/app" value="Back" icon="back" />
+      <GoTo to="/app" value="Back" icon="back" mode="light"/>
       <GoTo to="/app/profile/edit" value="Edit" icon="edit" />
     </div>
     <div class="w-full h-14">
