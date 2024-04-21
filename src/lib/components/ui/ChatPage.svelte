@@ -1,37 +1,32 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import Message from "./Message.svelte";
-  import { chatStore } from "$lib/stores/chatStore";
+  import { chatHandlers, chatStore } from "$lib/stores/chatStore";
   import { collection, doc, onSnapshot } from "firebase/firestore";
   import { firestore, firestoreCollections } from "$lib/firebase/config.client";
-  onMount(() => {
+  import { userStore } from "$lib/stores/store";
+  onMount(async () => {
     console.log("fetching the chat's");
     const chatId = $chatStore.chatData?.chatid;
     if (!chatId) {
       console.log("No Chat because it has not been initiated");
-      return;
-    } 
+    }
+    const currentChatId = await chatHandlers.fetchChatId(
+      $chatStore.chattingWith?.uid || "",
+      $userStore.currentUser?.uid || ""
+    );
+    console.log(currentChatId);
+
     const unsubscribe = onSnapshot(
       collection(firestore, firestoreCollections.MESSAGES),
       (snapshot) => {
-        chatStore.set({
-          ...$chatStore,
-          chatData: null,
-          isChatLoading: true,
-        });
+        
         const allMessages = snapshot.docs.map((doc) => doc.data());
         const chatMessages = allMessages.filter(
-          (message) => message.chatId === chatId
+          (message) => message.chatid === chatId
         );
-        chatStore.set({
-          ...$chatStore,
-          chatData: {
-            chatid: chatMessages[0].chatId,
-            messages: chatMessages as Array<App.Message>,
-          },
-          isChatLoading: true,
-        });
-        console.log($chatStore.chatData);
+        console.log(chatMessages);
+        console.log($chatStore);
       }
     );
     onDestroy(() => unsubscribe());
