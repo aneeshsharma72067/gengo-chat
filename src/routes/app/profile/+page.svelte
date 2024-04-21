@@ -4,13 +4,16 @@
   import Email from "$lib/components/Icons/Email.svelte";
   import Instagram from "$lib/components/Icons/Instagram.svelte";
   import ChevronBack from "$lib/components/Icons/ChevronBack.svelte";
-  import GoBack from "$lib/components/ui/GoBack.svelte";
+  import GoTo from "$lib/components/ui/GoTo.svelte";
 </script>
 
 {#if $userStore.currentUser}
   <div class="relative">
-    <GoBack to="/app" />
-    <div class="relative w-full h-32">
+    <div class="flex w-full p-5 justify-between">
+      <GoTo to="/app" value="Back" icon="back" />
+      <GoTo to="/app/profile/edit" value="Edit" icon="edit" />
+    </div>
+    <div class="w-full h-14">
       <GradientBackground />
     </div>
     <div
