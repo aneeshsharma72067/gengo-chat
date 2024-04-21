@@ -5,6 +5,7 @@
   import {
     collection,
     doc,
+    limit,
     onSnapshot,
     orderBy,
     query,
@@ -33,7 +34,8 @@
       query(
         collection(firestore, firestoreCollections.MESSAGES),
         where("chatid", "==", chatId),
-        orderBy("sentAt", "asc")
+        orderBy("sentAt", "asc"),
+        limit(30)
       ),
       (snapshot) => {
         const chatMessages = snapshot.docs.map((doc) => doc.data());
@@ -49,6 +51,7 @@
         });
         if (chatContainer) {
           chatContainer.scrollTop = chatContainer?.scrollHeight;
+          console.log('scrolled to bottom')
         }
       }
     );
@@ -64,7 +67,7 @@
 </script>
 
 <div
-  class="w-full h-[75vh] overflow-y-scroll flex items-start justify-center"
+  class="w-full h-[70vh] md:h-[75vh] overflow-y-scroll flex items-start justify-center"
   id="chat-container"
 >
   <div class="w-full flex flex-col px-3 gap-3">
