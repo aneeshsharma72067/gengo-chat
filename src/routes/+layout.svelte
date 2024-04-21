@@ -37,7 +37,7 @@
 
 {#if $userStore.isUserLoading}
   <div
-    class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800 overflow-hidden"
+    class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800 overflow-x-hidden"
   >
     <div class="w-full h-1/2 flex items-center justify-center">
       <PageLoader />
@@ -45,7 +45,7 @@
   </div>
 {:else}
   <div
-    class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800 overflow-hidden"
+    class="bg-slate-100 w-screen min-h-screen h-screen text-slate-800 overflow-x-hidden"
   >
     <Toast />
     <slot />

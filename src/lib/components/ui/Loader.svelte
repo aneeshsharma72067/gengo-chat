@@ -1,9 +1,11 @@
-<div class="loader"></div>
+<script>
+  export let size = 18;
+</script>
+
+<div class="loader" style="width: {size}px; height: {size}px;"></div>
 
 <style>
   .loader {
-    width: 18px;
-    height: 18px;
     border: 2px solid #fff;
     border-bottom-color: transparent;
     border-radius: 50%;

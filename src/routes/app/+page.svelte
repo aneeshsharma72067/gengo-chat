@@ -5,7 +5,8 @@
   import { goto } from "$app/navigation";
   import { slide } from "svelte/transition";
   import { onMount } from "svelte";
-  import { chattingWithStore, chatStore } from "$lib/stores/chatStore";
+  import { chatStore } from "$lib/stores/chatStore";
+  import { chatHandlers } from "$lib/stores/chatStore";
 
   // Component Imports
   import Button from "$lib/components/ui/Button.svelte";
@@ -16,6 +17,7 @@
   import Search from "$lib/components/Icons/Search.svelte";
   import Chat from "$lib/components/ui/Chat.svelte";
   import ChatSkeletonLoader from "$lib/components/ui/ChatSkeletonLoader.svelte";
+  import Loader from "$lib/components/ui/Loader.svelte";
   import ChatPage from "$lib/components/ui/ChatPage.svelte";
   import ChevronBack from "$lib/components/Icons/ChevronBack.svelte";
   import EllipsisVertical from "$lib/components/Icons/EllipsisVertical.svelte";
@@ -23,6 +25,7 @@
 
   let showMenu: boolean = false;
   let chatIsOpen: boolean = false;
+  let sendingMessage: boolean = false;
   let users: Array<App.User> = [];
   const message: App.Message = {
     content: "",
@@ -43,6 +46,7 @@
   };
 
   const toggleChat = (user?: App.User) => {
+    message.content = "";
     if (chatIsOpen) {
       chatStore.set({
         chatData: null,
@@ -60,7 +64,11 @@
   };
 
   const sendMessage = async () => {
-    console.log(message);
+    sendingMessage = true;
+    const res = await chatHandlers.sendMessage(message);
+    console.log(res);
+    sendingMessage = false;
+    message.content = "";
   };
 
   onMount(async () => {
@@ -75,7 +83,7 @@
   <div class="w-full flex flex-col bg-[#4e3ee6] min-h-screen relative">
     {#if chatIsOpen}
       <section
-        class="absolute top-0 right-0 z-50 h-screen w-screen mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"
+        class="fixed top-0 right-0 z-50 h-screen w-screen mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"
       >
         <div
           class="flex flex-col w-[95%] gap-3 h-full max-h-full mx-auto py-3 justify-between"
@@ -126,7 +134,11 @@
                 on:click={sendMessage}
                 class="flex items-center justify-center rounded-full bg-indigo-500 p-3 duration-100 hover:bg-[#4e3ee6]"
               >
-                <Send size={25} />
+                {#if sendingMessage}
+                  <Loader size={25} />
+                {:else}
+                  <Send size={25} />
+                {/if}
               </button>
             </div>
           </div>
@@ -176,7 +188,7 @@
         </div>
       </div>
     </section>
-    <section class="w-full py-4 bg-white rounded-3xl min-h-svh">
+    <section class="w-full py-4 bg-white rounded-3xl min-h-[90vh]">
       <div class="w-[90%] mx-auto">
         <div
           class="flex items-center gap-4 border-2 border-indigo-400 rounded-3xl pl-3 overflow-hidden"

@@ -12,6 +12,7 @@ export const chattingWithStore: Writable<string | null> = writable(null);
 export const chatHandlers = {
   sendMessage: async (message: App.Message) => {
     const res = await addMessage(message);
+    return res;
   },
   fetchChatId: async (id1: string, id2: string) => {
     const res = await getChatId(id1, id2);
