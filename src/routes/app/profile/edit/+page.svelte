@@ -9,7 +9,9 @@
 
 
   let userData = {
-
+    fullname: '',
+    username: '',
+    avatar: null,
   }
   let files: FileList;
   let imageUrl: string | null = null;
@@ -62,8 +64,9 @@
 
     </div>
     <div class="flex flex-col gap-3">
-      <InputWithLabel type="text" value="helllo" label="Full Name" name="fullname" placeholder="Enter your full name..." icon="password" class="w-[80%]  mx-auto" />
+      <InputWithLabel type="text" value={$userStore.currentUser?.fullname || ''} label="Full Name" name="fullname" placeholder="Enter your full name..." icon="password" class="w-[80%]  mx-auto" />
       <InputWithLabel type="text" value={$userStore.currentUser?.username || ''} label="Username" name="username" placeholder="Enter your username..." icon="password" class="w-[80%]  mx-auto" />
+      <InputWithLabel type="text" value={$userStore.currentUser?.bio || ''} label="Bio" name="bio" placeholder="Your bio..." icon="password" class="w-[80%]  mx-auto" />
     </div>
   </div>
 </section>
