@@ -89,7 +89,7 @@
   <div class="w-full flex flex-col bg-tertiary min-h-screen relative">
     {#if chatIsOpen}
       <section
-        class="fixed top-0 right-0 z-50 h-[93vh] md:h-screen w-screen mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"
+        class="fixed top-0 right-0 md:hidden z-50 h-[93vh] md:h-screen w-screen mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"
       >
         <div
           class="flex flex-col w-[95%] gap-3 h-full max-h-full mx-auto py-3 justify-between"
@@ -127,7 +127,6 @@
                 {/if}
               </p>
             </div>
-         
           </div>
           <div class="w-full h-full">
             <ChatPage />
@@ -183,60 +182,138 @@
         </div>
       </section>
     {/if}
-    <section class="w-full px-5 h-20 flex items-center justify-between">
-      <div>
-        <h2 class="text-3xl text-white font-bold">Chats</h2>
-      </div>
-      <div class="flex gap-5 items-center">
-        <a href="/app/profile" class="rounded-full overflow-hidden">
-          {#if $userStore.currentUser?.photoUrl}
-            <img
-              src={$userStore.currentUser?.photoUrl}
-              alt="profile"
-              width="46"
-              height="46"
-            />
-          {:else}
-            <UserIcon />
-          {/if}
-        </a>
+    <div class="flex ">
+      <div class="flex flex-1 flex-col bg-tertiary min-h-screen items-center">
+      <section class="w-full px-5 h-20 flex items-center justify-between">
         <div>
-          <Menu
-            size={40}
-            on:click={() => {
-              showMenu = !showMenu;
-            }}
-          />
+          <h2 class="text-3xl text-white font-bold">Chats</h2>
         </div>
-      </div>
-    </section>
-    <section class="w-full py-4 bg-white rounded-3xl min-h-[90vh]">
-      <div class="w-[90%] mx-auto">
+        <div class="flex gap-5 items-center">
+          <a href="/app/profile" class="rounded-full overflow-hidden">
+            {#if $userStore.currentUser?.photoUrl}
+              <img
+                src={$userStore.currentUser?.photoUrl}
+                alt="profile"
+                width="46"
+                height="46"
+              />
+            {:else}
+              <UserIcon />
+            {/if}
+          </a>
+          <div>
+            <Menu
+              size={40}
+              on:click={() => {
+                showMenu = !showMenu;
+              }}
+            />
+          </div>
+        </div>
+      </section>
+      <section class="w-full py-4 bg-white rounded-3xl min-h-[90vh]">
+        <div class="w-[90%] mx-auto">
+          <div
+            class="flex items-center gap-4 border-2 border-indigo-400 rounded-3xl pl-3 overflow-hidden"
+          >
+            <Search fill="#4e3ee6" size={30} />
+            <input
+              type="text"
+              class="outline-none border-none w-full py-3"
+              placeholder="Search...."
+            />
+          </div>
+        </div>
+        {#if users.length == 0}
+          <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
+            <ChatSkeletonLoader />
+            <ChatSkeletonLoader />
+            <ChatSkeletonLoader />
+          </div>
+        {:else}
+          <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
+            {#each users as user}
+              <Chat {user} on:click={() => toggleChat(user)} />
+            {/each}
+          </div>
+        {/if}
+      </section>
+    </div>
+    <div class="flex-1 hidden md:flex">
+      <section
+        class="z-50 w-full mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"
+      >
         <div
-          class="flex items-center gap-4 border-2 border-indigo-400 rounded-3xl pl-3 overflow-hidden"
+          class="flex flex-col w-[95%] gap-3 h-full max-h-full mx-auto py-3 justify-between"
         >
-          <Search fill="#4e3ee6" size={30} />
-          <input
-            type="text"
-            class="outline-none border-none w-full py-3"
-            placeholder="Search...."
-          />
+          <div
+            class="flex items-center gap-4 justify-between bg-indigo-600 px-3 py-2 rounded-full"
+          >
+            <button
+              on:click={() => toggleChat()}
+              class="flex gap-1 duration-300 items-center justify-center rounded-full bg-white px-2 py-1 hover:bg-slate-200 cursor-pointer"
+            >
+              <span><ChevronBack size={17} strokecolor="black" /></span>
+              <span class="text-slate-700 text-sm">Back</span>
+            </button>
+            <div class="flex items-center justify-start w-full gap-2">
+              {#if $chatStore.chattingWith?.photoUrl}
+                <img
+                  src={$chatStore.chattingWith?.photoUrl}
+                  alt=""
+                  on:load={() => {
+                    imageIsLoded = true;
+                  }}
+                  width={40}
+                  height={40}
+                />
+              {:else}
+                <UserIcon size={40} />
+              {/if}
+
+              <p class="text-lg text-white">
+                {#if $chatStore.isChatLoading || !$chatStore.chattingWith}
+                  Loading...
+                {:else}
+                  {$chatStore.chattingWith?.username}
+                {/if}
+              </p>
+            </div>
+          </div>
+          <div class="w-full h-full">
+            <ChatPage />
+          </div>
+          <div class="">
+            <div class="flex gap-4">
+              <input
+                type="text"
+                name="messageInput"
+                id="messageInput"
+                class="border-none w-full outline-none rounded-full px-4 py-2"
+                placeholder="Enter a Message..."
+                bind:value={message.content}
+                on:keydown={(e) => {
+                  if (e.key === "Enter") {
+                    sendMessage();
+                  }
+                }}
+              />
+              <button
+                on:click={sendMessage}
+                class="flex items-center justify-center rounded-full bg-indigo-500 p-3 duration-100 hover:bg-[#4e3ee6]"
+              >
+                {#if sendingMessage}
+                  <Loader size={25} />
+                {:else}
+                  <Send size={25} />
+                {/if}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-      {#if users.length == 0}
-        <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
-          <ChatSkeletonLoader />
-          <ChatSkeletonLoader />
-          <ChatSkeletonLoader />
-        </div>
-      {:else}
-        <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
-          {#each users as user}
-            <Chat {user} on:click={() => toggleChat(user)} />
-          {/each}
-        </div>
-      {/if}
-    </section>
+      </section>
+    </div>
+    </div>
   </div>
 </main>
 
