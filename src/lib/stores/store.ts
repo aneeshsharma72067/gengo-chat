@@ -2,6 +2,7 @@ import { FieldValue } from "firebase/firestore";
 import { writable, type Writable } from "svelte/store";
 import { firebaseAuth } from "$lib/firebase/config.client";
 import {
+  editUserData,
   getAllUsers,
   loginUser,
   logout,
@@ -36,8 +37,12 @@ export const authHandlers = {
 };
 
 export const dataHandlers = {
-  getAllUsers: async (uid:string) => {
+  getAllUsers: async (uid: string) => {
     const res = await getAllUsers(uid);
+    return res;
+  },
+  updateUserData: async (uid: string, userData: App.UserEditFormData) => {
+    const res = await editUserData(uid, userData);
     return res;
   },
 };

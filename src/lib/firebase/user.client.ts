@@ -4,7 +4,7 @@ import {
   signOut,
   type UserCredential,
 } from "firebase/auth";
-import { firebaseAuth, firestore } from "./config.client";
+import { firebaseAuth, firestore, storage } from "./config.client";
 import type { FirebaseError } from "firebase/app";
 import {
   addDoc,
@@ -16,6 +16,7 @@ import {
   where,
   doc,
 } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const loginUser = async (userData: App.LoginUserData) => {
   const { email, password } = userData;
@@ -115,4 +116,50 @@ export const getAllUsers = async (uid: string) => {
     });
   });
   return userList;
+};
+
+export const editUserData = async (
+  uid: string,
+  updatedData: App.UserEditFormData
+) => {
+  try {
+    const { avatar, bio, fullname, username } = updatedData;
+    let photoUrl: string = "";
+    if (avatar) {
+      const storageRef = ref(
+        storage,
+        `avatars/${avatar?.name.toLowerCase() || "avatar"}`
+      );
+      const avatarSnapshot = await uploadBytes(storageRef, avatar);
+      photoUrl = await getDownloadURL(avatarSnapshot.ref);
+    }
+    const querySnapshot = await getDocs(
+      query(collection(firestore, "users"), where("uid", "==", uid))
+    );
+    const newData = {
+      username,
+      fullname,
+      bio,
+      photoUrl,
+    };
+    querySnapshot.forEach(async (item) => {
+      const userRef = doc(firestore, "users", item.id);
+      await updateDoc(userRef, newData);
+    });
+
+    return {
+      success: true,
+      error: null,
+      data: {
+        updatedUserData: newData,
+      },
+    };
+  } catch (error) {
+    const errorMessage = (error as FirebaseError)?.message;
+    console.log((error as FirebaseError)?.message);
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
 };

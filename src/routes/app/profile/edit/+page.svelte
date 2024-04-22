@@ -6,6 +6,8 @@
   import Button from "$lib/components/ui/Button.svelte";
 
   import { userStore } from "$lib/stores/store";
+  import { dataHandlers } from "$lib/stores/store";
+  import { showToast } from "$lib/components/func/toasts";
 
   let userData: App.UserEditFormData = {
     fullname: $userStore.currentUser?.fullname || "",
@@ -15,6 +17,7 @@
   };
 
   let files: FileList;
+  let loading = false;
   let imageUrl: string | null = $userStore.currentUser?.photoUrl || null;
   const createFileUrl = () => {
     const selectedImage = files[0];
@@ -25,7 +28,20 @@
   };
 
   const handleSubmit = async () => {
-    console.log(userData);
+    loading = true;
+    const res = await dataHandlers.updateUserData(
+      $userStore.currentUser?.uid || "",
+      userData
+    );
+    ;
+    if (res.success) {
+      showToast("Profile Edited Successfully", "success");
+    
+    } else {
+      showToast("Something went Wrong", "error");
+    }
+
+    loading = false;
   };
 </script>
 
@@ -100,6 +116,7 @@
     </div>
     <div>
       <Button
+        isLoading={loading}
         class="px-14 bg-zinc-900 hover:bg-zinc-600"
         on:click={handleSubmit}>Submit</Button
       >
