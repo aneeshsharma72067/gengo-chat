@@ -79,8 +79,10 @@
   let msg = "";
 </script>
 
+
+<title>Chats</title>
 <main>
-  <div class="w-full flex flex-col bg-[#4e3ee6] min-h-screen relative">
+  <div class="w-full flex flex-col bg-tertiary min-h-screen relative">
     {#if chatIsOpen}
       <section
         class="fixed top-0 right-0 z-50 h-[93vh] md:h-screen w-screen mx-auto bg-gradient-to-b from-indigo-200 to-indigo-300 duration-300"

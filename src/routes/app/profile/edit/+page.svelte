@@ -3,26 +3,33 @@
   import UserIcon from "$lib/components/Icons/UserIcon.svelte";
   import Edit from "$lib/components/Icons/Edit.svelte";
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
 
-  import { onMount } from "svelte";
-  import {userStore} from '$lib/stores/store'
+  import { userStore } from "$lib/stores/store";
 
-
-  let userData = {
-    fullname: '',
-    username: '',
+  let userData: App.UserEditFormData = {
+    fullname: $userStore.currentUser?.fullname || "",
+    username: $userStore.currentUser?.username || "",
     avatar: null,
-  }
+    bio: $userStore.currentUser?.bio || "",
+  };
+
   let files: FileList;
-  let imageUrl: string | null = null;
+  let imageUrl: string | null = $userStore.currentUser?.photoUrl || null;
   const createFileUrl = () => {
     const selectedImage = files[0];
+    userData.avatar = selectedImage;
     const url = URL.createObjectURL(selectedImage);
     imageUrl = url;
     console.log(imageUrl);
   };
+
+  const handleSubmit = async () => {
+    console.log(userData);
+  };
 </script>
 
+<title>Edit Profile</title>
 <section>
   <div class="w-[90%] mx-auto flex flex-col gap-5">
     <div class="flex w-full py-4 justify-between">
@@ -61,12 +68,41 @@
           <Edit size={20} strokecolor="#fff" />
         </label>
       </div>
-
     </div>
     <div class="flex flex-col gap-3">
-      <InputWithLabel type="text" value={$userStore.currentUser?.fullname || ''} label="Full Name" name="fullname" placeholder="Enter your full name..." icon="password" class="w-[80%]  mx-auto" />
-      <InputWithLabel type="text" value={$userStore.currentUser?.username || ''} label="Username" name="username" placeholder="Enter your username..." icon="password" class="w-[80%]  mx-auto" />
-      <InputWithLabel type="text" value={$userStore.currentUser?.bio || ''} label="Bio" name="bio" placeholder="Your bio..." icon="password" class="w-[80%]  mx-auto" />
+      <InputWithLabel
+        type="text"
+        bind:value={userData.fullname}
+        label="Full Name"
+        name="fullname"
+        placeholder="Enter your full name..."
+        icon="password"
+        class="w-[80%]  mx-auto"
+      />
+      <InputWithLabel
+        type="text"
+        bind:value={userData.username}
+        label="Username"
+        name="username"
+        placeholder="Enter your username..."
+        icon="password"
+        class="w-[80%]  mx-auto"
+      />
+      <InputWithLabel
+        type="text"
+        bind:value={userData.bio}
+        label="Bio"
+        name="bio"
+        placeholder="Your bio..."
+        icon="password"
+        class="w-[80%]  mx-auto"
+      />
+    </div>
+    <div>
+      <Button
+        class="px-14 bg-zinc-900 hover:bg-zinc-600"
+        on:click={handleSubmit}>Submit</Button
+      >
     </div>
   </div>
 </section>

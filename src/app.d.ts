@@ -51,6 +51,12 @@ declare global {
       isChatLoading: boolean;
       chattingWith: App.User | null;
     }
+    interface UserEditFormData {
+      username: string;
+      fullname: string;
+      avatar: File | null;
+      bio: string;
+    }
   }
 }
 

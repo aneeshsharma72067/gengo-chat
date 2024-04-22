@@ -12,7 +12,9 @@ import {
   getDocs,
   query,
   serverTimestamp,
+  updateDoc,
   where,
+  doc,
 } from "firebase/firestore";
 
 export const loginUser = async (userData: App.LoginUserData) => {
