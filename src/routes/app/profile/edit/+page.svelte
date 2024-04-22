@@ -25,7 +25,6 @@
     userData.avatar = selectedImage;
     const url = URL.createObjectURL(selectedImage);
     imageUrl = url;
-    console.log(imageUrl);
   };
 
   const handleSubmit = async () => {
@@ -87,7 +86,6 @@
           accept="image/png, image/jpeg"
           bind:files
           on:change={() => {
-            console.log(files);
             createFileUrl();
           }}
         />

@@ -13,11 +13,9 @@
   onMount(() => {
     loading = true;
     const unsubscribe = firebaseAuth.onAuthStateChanged(async (user) => {
-      console.log(user);
       if (user) {
         const userData = (await getUserData(user.uid)) as App.User;
         userStore.update((curr) => {
-          console.log("New User : ", userData);
           return { ...curr, isUserLoading: false, currentUser: userData };
         });
         if ($page.url.pathname.includes("auth") || $page.url.pathname == "/") {
@@ -27,7 +25,6 @@
         userStore.update((curr) => {
           return { ...curr, isUserLoading: false, currentUser: null };
         });
-        console.log("goto login called from root layout");
         goto("/auth/login");
       }
     });

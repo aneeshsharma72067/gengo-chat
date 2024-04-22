@@ -64,7 +64,6 @@
       const chatContainer = document.getElementById("chat-container");
       if (chatContainer) {
         chatContainer.scrollTop = chatContainer?.scrollHeight;
-        console.log("scrolled to bottom");
       }
     }
     chatIsOpen = !chatIsOpen;
@@ -73,7 +72,6 @@
   const sendMessage = async () => {
     sendingMessage = true;
     const res = await chatHandlers.sendMessage(message);
-    console.log(res);
     sendingMessage = false;
     message.content = "";
   };
@@ -113,7 +111,6 @@
                   alt=""
                   on:load={() => {
                     imageIsLoded = true;
-                    console.log();
                   }}
                   width={40}
                   height={40}
@@ -130,9 +127,7 @@
                 {/if}
               </p>
             </div>
-            <div>
-              <EllipsisVertical size={20} />
-            </div>
+         
           </div>
           <div class="w-full h-full">
             <ChatPage />
