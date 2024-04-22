@@ -39,7 +39,6 @@
       ),
       (snapshot) => {
         const chatMessages = snapshot.docs.map((doc) => doc.data());
-        console.log(chatMessages);
 
         chatStore.set({
           ...$chatStore,
@@ -51,7 +50,6 @@
         });
         if (chatContainer) {
           chatContainer.scrollTop = chatContainer?.scrollHeight;
-          console.log('scrolled to bottom')
         }
       }
     );

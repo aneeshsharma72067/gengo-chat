@@ -68,7 +68,6 @@ export const getChatId = async (user1id: string, user2id: string) => {
       )
     );
     if (!chatSnapShot.empty) {
-      console.log("Chat ID found");
       const data = chatSnapShot.docs[0].data();
       return {
         success: true,
@@ -78,7 +77,6 @@ export const getChatId = async (user1id: string, user2id: string) => {
         },
       };
     }
-    console.log("Chat ID Not found");
 
     const newChatId = uuid4();
     const newChat = await addDoc(
