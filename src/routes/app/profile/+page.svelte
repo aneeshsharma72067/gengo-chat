@@ -5,6 +5,8 @@
   import Instagram from "$lib/components/Icons/Instagram.svelte";
   import ChevronBack from "$lib/components/Icons/ChevronBack.svelte";
   import GoTo from "$lib/components/ui/GoTo.svelte";
+
+  let imageIsLoded = false;
 </script>
 
 {#if $userStore.currentUser}
@@ -25,11 +27,21 @@
       </div>
       <div class="flex items-center justify-center">
         {#if $userStore.currentUser.photoUrl}
-          <img
-            src={$userStore.currentUser.photoUrl}
-            alt="profile"
-            class="rounded-full aspect-square"
-          />
+          <div class="flex items-center justify-center bg-white rounded-full">
+            <img
+              src={$userStore.currentUser.photoUrl || ""}
+              alt="profile"
+              class="rounded-full aspect-square"
+              on:load={() => {
+                imageIsLoded = true;
+              }}
+            />
+          </div>
+          {#if !imageIsLoded}
+            <div
+              class="w-32 h-32 rounded-full bg-gradient-to-r from-gray-400 to-gray-200 animate-pulse"
+            ></div>
+          {/if}
         {:else}
           <div
             class="w-32 h-32 rounded-full bg-red-500 border-4 border-white"

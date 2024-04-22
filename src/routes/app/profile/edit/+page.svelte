@@ -4,6 +4,7 @@
   import Edit from "$lib/components/Icons/Edit.svelte";
   import InputWithLabel from "$lib/components/ui/InputWithLabel.svelte";
   import Button from "$lib/components/ui/Button.svelte";
+  import { serverTimestamp } from "firebase/firestore";
 
   import { userStore } from "$lib/stores/store";
   import { dataHandlers } from "$lib/stores/store";
@@ -33,10 +34,23 @@
       $userStore.currentUser?.uid || "",
       userData
     );
-    ;
-    if (res.success) {
+    if (res.success && res.data) {
       showToast("Profile Edited Successfully", "success");
-    
+      userStore.set({
+        isUserLoading: false,
+        currentUser: {
+          username: res.data.updatedUserData.username,
+          email: $userStore.currentUser?.email || "",
+          createdAt: $userStore.currentUser?.createdAt || serverTimestamp(),
+          uid: $userStore.currentUser?.uid || "",
+          updatedAt: $userStore.currentUser?.updatedAt || serverTimestamp(),
+          bio: res.data.updatedUserData.bio,
+          friends: $userStore.currentUser?.friends,
+          fullname: res.data.updatedUserData.fullname,
+          photoUrl: res.data.updatedUserData.photoUrl,
+          socialMedia: $userStore.currentUser?.socialMedia,
+        },
+      });
     } else {
       showToast("Something went Wrong", "error");
     }

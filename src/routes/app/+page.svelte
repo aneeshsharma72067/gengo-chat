@@ -27,6 +27,8 @@
   let chatIsOpen: boolean = false;
   let sendingMessage: boolean = false;
   let users: Array<App.User> = [];
+  let imageIsLoded = false;
+
   const message: App.Message = {
     content: "",
     sendersId: $userStore.currentUser ? $userStore.currentUser.uid : "",
@@ -59,6 +61,11 @@
         chattingWith: user || null,
         isChatLoading: false,
       });
+      const chatContainer = document.getElementById("chat-container");
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer?.scrollHeight;
+        console.log("scrolled to bottom");
+      }
     }
     chatIsOpen = !chatIsOpen;
   };
@@ -78,7 +85,6 @@
   });
   let msg = "";
 </script>
-
 
 <title>Chats</title>
 <main>
@@ -101,7 +107,21 @@
               <span class="text-slate-700 text-sm">Back</span>
             </button>
             <div class="flex items-center justify-start w-full gap-2">
-              <UserIcon size={40} />
+              {#if $chatStore.chattingWith?.photoUrl}
+                <img
+                  src={$chatStore.chattingWith?.photoUrl}
+                  alt=""
+                  on:load={() => {
+                    imageIsLoded = true;
+                    console.log();
+                  }}
+                  width={40}
+                  height={40}
+                />
+              {:else}
+                <UserIcon size={40} />
+              {/if}
+
               <p class="text-lg text-white">
                 {#if $chatStore.isChatLoading || !$chatStore.chattingWith}
                   Loading...
@@ -175,7 +195,12 @@
       <div class="flex gap-5 items-center">
         <a href="/app/profile" class="rounded-full overflow-hidden">
           {#if $userStore.currentUser?.photoUrl}
-            <img src={$userStore.currentUser?.photoUrl} alt="profile" />
+            <img
+              src={$userStore.currentUser?.photoUrl}
+              alt="profile"
+              width="46"
+              height="46"
+            />
           {:else}
             <UserIcon />
           {/if}
