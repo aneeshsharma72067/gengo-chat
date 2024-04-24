@@ -20,13 +20,13 @@
   import Loader from "$lib/components/ui/Loader.svelte";
   import ChatPage from "$lib/components/ui/ChatPage.svelte";
   import ChevronBack from "$lib/components/Icons/ChevronBack.svelte";
-  import EllipsisVertical from "$lib/components/Icons/EllipsisVertical.svelte";
   import Send from "$lib/components/Icons/Send.svelte";
 
   let showMenu: boolean = false;
   let chatIsOpen: boolean = false;
   let sendingMessage: boolean = false;
   let users: Array<App.User> = [];
+  let userList: Array<App.User> = [];
   let imageIsLoded = false;
 
   const message: App.Message = {
@@ -47,41 +47,57 @@
     showToast("Logged out succesfully", "success");
   };
 
-  const toggleChat = (user?: App.User) => {
+  const closeChat = () => {
+    console.log("chat closed");
+
     message.content = "";
-    if (chatIsOpen) {
-      chatStore.set({
-        chatData: null,
-        chattingWith: null,
-        isChatLoading: false,
-      });
-    } else {
+    chatStore.set({
+      chatData: null,
+      chattingWith: null,
+      isChatLoading: false,
+    });
+    chatIsOpen = false;
+  };
+
+  const openChat = (user?: App.User) => {
+    closeChat();
+    setTimeout(() => {
+      message.content = "";
+
       chatStore.set({
         ...$chatStore,
         chattingWith: user || null,
         isChatLoading: false,
       });
-      const chatContainer = document.getElementById("chat-container");
-      if (chatContainer) {
-        chatContainer.scrollTop = chatContainer?.scrollHeight;
-      }
+      chatIsOpen = true;
+    }, 0);
+    const chatContainer = document.getElementById("chat-container");
+    if (chatContainer) {
+      chatContainer.scrollTop = chatContainer?.scrollHeight;
     }
-    chatIsOpen = !chatIsOpen;
   };
 
   const sendMessage = async () => {
+    if (message.content === "") return;
     sendingMessage = true;
     const res = await chatHandlers.sendMessage(message);
     sendingMessage = false;
     message.content = "";
   };
+  let searchQuery = "";
+  let usersAreLoading = true;
+  const searchUsers = () => {
+    users = userList.filter((user) => user.username.includes(searchQuery));
+  };
 
   onMount(async () => {
+    usersAreLoading = true;
     if ($userStore.currentUser) {
-      users = await dataHandlers.getAllUsers($userStore.currentUser.uid);
+      userList = await dataHandlers.getAllUsers($userStore.currentUser.uid);
+      users = userList;
     }
+    usersAreLoading = false;
   });
-  let msg = "";
 </script>
 
 <title>Chats</title>
@@ -98,7 +114,7 @@
             class="flex items-center gap-4 justify-between bg-indigo-600 px-3 py-2 rounded-full"
           >
             <button
-              on:click={() => toggleChat()}
+              on:click={() => closeChat()}
               class="flex gap-1 duration-300 items-center justify-center rounded-full bg-white px-2 py-1 hover:bg-slate-200 cursor-pointer"
             >
               <span><ChevronBack size={17} strokecolor="black" /></span>
@@ -163,16 +179,16 @@
     {/if}
     {#if showMenu}
       <section
-        class="absolute top-[5.5rem] right-2 text-white"
+        class="absolute top-[5.5rem] right-2 md:right-[51%] text-white"
         transition:slide={{ axis: "x" }}
       >
         <div class="flex flex-col rounded-3xl overflow-hidden items-center">
-          <div class="">
+          <!-- <div class="">
             <div class="menu-item pt-4 pb-2">
               <span><Settings size={30} /></span>
               <span class="text-lg">Settings</span>
             </div>
-          </div>
+          </div> -->
           <div class="">
             <button class="menu-item pt-2 pb-4" on:click={handleLogout}>
               <span><Logout size={30} /></span>
@@ -221,19 +237,25 @@
                 type="text"
                 class="outline-none border-none w-full py-3"
                 placeholder="Search...."
+                bind:value={searchQuery}
+                on:input={searchUsers}
               />
             </div>
           </div>
           {#if users.length == 0}
-            <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
-              <ChatSkeletonLoader />
-              <ChatSkeletonLoader />
-              <ChatSkeletonLoader />
-            </div>
+            {#if usersAreLoading}
+              <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
+                <ChatSkeletonLoader />
+                <ChatSkeletonLoader />
+                <ChatSkeletonLoader />
+              </div>
+            {:else}
+              <div>No users</div>
+            {/if}
           {:else}
             <div class="w-[90%] mx-auto flex flex-col gap-2 mt-10">
               {#each users as user}
-                <Chat {user} on:click={() => toggleChat(user)} />
+                <Chat {user} on:click={() => openChat(user)} />
               {/each}
             </div>
           {/if}
@@ -297,6 +319,7 @@
                     }}
                   />
                   <button
+                    disabled={message.content === ""}
                     on:click={sendMessage}
                     class="flex items-center justify-center rounded-full bg-indigo-500 p-3 duration-100 hover:bg-[#4e3ee6]"
                   >

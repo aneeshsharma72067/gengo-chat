@@ -14,6 +14,7 @@
   import { firestore, firestoreCollections } from "$lib/firebase/config.client";
   import { userStore } from "$lib/stores/store";
   onMount(async () => {
+    console.log("component mounted");
     const chatContainer = document.getElementById("chat-container");
     chatStore.set({
       ...$chatStore,
@@ -55,6 +56,8 @@
     );
     onDestroy(() => {
       unsubscribe();
+      console.log("component dismounted");
+
       chatStore.set({
         chatData: null,
         chattingWith: null,
