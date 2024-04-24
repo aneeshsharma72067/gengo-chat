@@ -1,38 +1,28 @@
-# create-svelte
+# Chat App using Sveltekit and Firebase
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+This is a personal project I created to learn about sveltekit and integration of Firebase with Sveltekit. This is a basic chat applications with some advance features like real time chat translation.
 
-## Creating a project
+# About Svelte and why I chose it
 
-If you're seeing this, you've probably already done this step. Congrats!
+I made this project to learn about svelte. Personally I find svelte an amazing framework, after having some experience with react which uses virtual DOM for rendering HTML, svelte felt like a fresh start which actually compiles all the bundle into a single js file. Svelte has some amazing in-built features like stores, transitions etc.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Sveltekit included Svelte with some cherry on the top features like file based routing system, Server side files, Layout files, and server files to create standalone API's.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+Although svelte may not be mature yet and may not have a vast community like react, but it will grow a lot in future. It has a lot of space for improvement and it is definitely going to carry the web development market someday.
 
-## Developing
+# Packages used
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The main tech stack is Sveltekit + Firebase + TS
+Some packages I used are:
 
-```bash
-npm run dev
+- svelte-toast : For Toasts
+- Tailwind CSS : For ease in writing css quickly
+- UUID : A javascript library for creating id's
+- Vite : For faster development (hmr is a blessing 😁)
+- Eslint : Code Analysis Tool
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+# Features to be developed
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- Real Time Chat Translation
+- A Better UI
+- User Profile Visit
