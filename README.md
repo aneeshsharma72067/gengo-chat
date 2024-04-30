@@ -23,6 +23,7 @@ Some packages I used are:
 
 # Features to be developed
 
+- Google Auth
 - Real Time Chat Translation
 - A Better UI
 - User Profile Visit
