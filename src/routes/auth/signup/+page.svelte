@@ -73,13 +73,10 @@
       Register now to get started
     </h1>
     <p class="">Enter your details to sign up</p>
-    <SignInWithGoogle authType="signup" />
-    <div class="flex w-full items-center justify-center gap-5">
-      <hr class="border-slate-300 w-full" />
-      <span>OR</span>
-      <hr class="border-slate-300 w-full" />
+    <div class="flex items-center justify-center my-1">
+      <img src="/logo.png" alt="Logo" class="max-w-24" />
     </div>
-    <div class="flex flex-col gap-4 w-full items-center">
+    <div class="flex flex-col gap-4 my-3 w-full items-center">
       <InputWithLabel
         name="username"
         type="text"

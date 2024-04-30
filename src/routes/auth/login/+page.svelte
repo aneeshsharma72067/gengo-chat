@@ -64,17 +64,12 @@
 >
   <div class="flex md:flex-1 flex-col gap-1 items-center w-4/5 md:w-2/5">
     <div class="flex items-center justify-center my-1">
-      <div class="w-14 h-14 bg-red-400 rounded-full"></div>
+      <img src="/logo.png" alt="Logo" class="max-w-24" />
     </div>
     <h1 class="text-[1.7rem] font-medium">Welcome Back</h1>
     <p>Enter your details to sign in</p>
-    <SignInWithGoogle authType="signin" />
-    <div class="flex w-full items-center justify-center gap-5">
-      <hr class="border-slate-300 w-full" />
-      <span>OR</span>
-      <hr class="border-slate-300 w-full" />
-    </div>
-    <div class="flex flex-col gap-4 w-full items-center">
+
+    <div class="flex flex-col gap-4 w-full my-3 items-center">
       <InputWithLabel
         name="email"
         type="email"
